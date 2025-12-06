@@ -1,9 +1,165 @@
 # IPMI - LLM specilized on social security legislation
 
 
+
 ---
 
-# **📌 Training Pipeline Overview**
+## **📘 Model Architecture Overview (Simple Explanation)**
+
+This project fine-tunes a **Qwen 2.5–1.5B** language model and turns it into a *careful, critical, technical assistant*.
+The goal is to make the model better at reasoning about:
+
+* **Python code**
+* **Linux commands**
+* **Chat interactions**
+* **Excel formulas**
+* **Crypto/market data** (BTC–USDT)
+* **General critical thinking** (avoid hallucinations)
+
+Although several training scripts exist, they all follow the **same overall structure**, described below.
+
+---
+
+## **1. Base Model (“The Brain”)**
+
+We start with:
+
+**Qwen2.5-1.5B-Instruct**
+— a small, fast, instruction-tuned language model.
+
+It is loaded in **4-bit mode** so it fits on normal GPUs and trains efficiently.
+
+Sometimes we add **LoRA adapters**, which lets us train only small parts of the model instead of the whole thing.
+
+---
+
+## **2. Training Data (“What the Model Learns From”)**
+
+The model learns from **examples** taken from:
+
+* Python tasks
+* Linux command tasks
+* Chat datasets (GPT-5 style)
+* Excel error-correction datasets
+* Crypto datasets
+* Critical thinking datasets
+
+Some scripts also use **distillation**, where a larger “teacher model” generates synthetic answers.
+The smaller Qwen model then learns by imitating those answers.
+
+---
+
+## **3. Unified Format (“How All Examples Look the Same”)**
+
+Even though the data comes from different sources, every example is rewritten into a **simple text format** that includes:
+
+* A short **system instruction** (ex: “You are a critical Python assistant…”)
+* A **domain tag** (ex: `[DOMÍNIO: PYTHON]`)
+* A **user question or command**
+* The **correct answer**, explanation, or reference solution
+
+This makes all training data look similar, which helps the model learn consistent behavior.
+
+Example:
+
+```
+Você é uma assistente crítica de Python.
+[DOMÍNIO: PYTHON]
+Problema: <text>
+Solução de referência: <code>
+```
+
+---
+
+## **4. Tokenization & Dataset Creation**
+
+Each formatted example is converted into numbers the model can understand (tokens).
+
+We create a dataset where:
+
+* `input_ids` = what the model reads
+* `labels` = what the model should learn to predict
+* Padding is added so they fit nicely into batches
+
+This is standard **causal language modeling**.
+
+---
+
+## **5. The Training Loop (HuggingFace Trainer)**
+
+All training scripts use the same routine:
+
+1. Load the Qwen model in 4-bit
+2. (Optional) Add LoRA adapters
+3. Load the dataset
+4. Train using HuggingFace’s `Trainer` with:
+
+   * Small batch sizes
+   * Gradient accumulation
+   * 8-bit optimizer
+   * fp16/bf16 support
+5. Save the fine-tuned model into `output_dir/`
+
+No matter which script you choose, the training process follows this pattern.
+
+---
+
+## **6. Variants of the Training Pipeline**
+
+Your project includes several training scripts:
+
+### **A. Distillation**
+
+Uses a big teacher model to generate synthetic answers, then trains Qwen on them.
+
+### **B. Multi-Domain (full)**
+
+Trains on Python + Linux + Chat + Crypto (and sometimes Excel).
+
+Good for building a **general critical technical assistant**.
+
+### **C. Multi-Domain Light**
+
+Only Python + Linux.
+Faster, simpler, smaller dataset.
+
+Ideal for small GPUs and quick testing.
+
+---
+
+## **7. What You Get at the End**
+
+The output is a **fine-tuned LLM** that:
+
+* Reads code and points out mistakes
+* Analyzes Linux commands with security awareness
+* Answers like a careful assistant, not a hallucinating one
+* Handles technical tasks in multiple domains
+* Avoids blindly agreeing with the user
+* Follows your custom templates and tone of voice
+
+This gives you a **compact, specialized, safety-aware technical model** based on Qwen.
+
+---
+
+## **Want a “How to Train” section or example commands?**
+
+I can add:
+
+* Installation instructions
+* How to run each training script
+* Recommended hardware
+* Example training commands
+* Inference examples
+* A “Contributing” section for collaborators
+
+Just tell me.
+
+
+---
+# Technical Description 
+
+## **📌 Training Pipeline Overview**
 
 This repository implements a complete **LLM fine-tuning pipeline** for Qwen-2.5 models using multiple strategies:
 
@@ -17,7 +173,7 @@ The goal is to produce models that are **more critical, more precise, safer, and
 
 ---
 
-# **🧱 1. Data Layer**
+## **🧱 1. Data Layer**
 
 The pipeline supports two types of data:
 
@@ -41,7 +197,7 @@ These responses are saved as `.txt` and later used to train a smaller student mo
 
 ---
 
-# **🧹 2. Normalization & Prompt Templates**
+## **🧹 2. Normalization & Prompt Templates**
 
 All datasets are converted into a **unified one-text-per-line** format containing:
 
@@ -60,7 +216,7 @@ This step ensures consistency across heterogeneous datasets and reinforces the d
 
 ---
 
-# **📦 3. Dataset Construction**
+## **📦 3. Dataset Construction**
 
 After normalization:
 
@@ -79,7 +235,7 @@ Different versions use either:
 
 ---
 
-# **🧠 4. Model Loading**
+## **🧠 4. Model Loading**
 
 All training scripts load **Qwen2.5-1.5B-Instruct** in **4-bit quantization**, enabling fine-tuning on affordable GPUs.
 
@@ -97,7 +253,7 @@ This enables:
 
 ---
 
-# **⚙️ 5. Training Loop (HF Trainer)**
+## **⚙️ 5. Training Loop (HF Trainer)**
 
 All models are trained using **HuggingFace Trainer**, with settings such as:
 
@@ -121,7 +277,7 @@ TrainingArguments(
 
 ---
 
-# **🎯 6. Output Models**
+## **🎯 6. Output Models**
 
 Depending on the script used, the pipeline yields:
 
@@ -141,7 +297,7 @@ All models are saved to `output_dir/` along with the tokenizer.
 
 ---
 
-# **🔍 Summary Diagram**
+## **🔍 Summary Diagram**
 
 ```
 flowchart TD
@@ -167,7 +323,7 @@ flowchart TD
 
 ---
 
-# **📘 What This Pipeline Enables**
+## **📘 What This Pipeline Enables**
 
 * Training **full LLMs on consumer GPUs**
 * Producing models with **strong critical reasoning**
