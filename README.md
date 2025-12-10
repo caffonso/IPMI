@@ -1,5 +1,47 @@
 # IPMI - LLM specilized on social security legislation
 
+## 1. Overview
+
+This project aims to develop a domain-specialized LLM focused on Brazilian Social Security Law, integrating normative rules, case-based reasoning, jurisprudential interpretation, and administrative procedures.
+The model is designed to support decision-making in Institutos de Previdência, accountants, and professionals working with INSS, RPPS, and social security planning.
+
+The system combines:
+
+Fine-tuning for legal reasoning and structured analysis
+
+RAG (Retrieval-Augmented Generation) for up-to-date normative content
+
+Synthetic and curated datasets representing real-world cases, jurisprudence, and procedures
+
+Its goal is to deliver clear, consistent, and legally grounded responses for practical and administrative use.
+
+## 2. Target Audience
+Primary Users
+
+Institutos de Previdência / RPPS
+
+Benefit analysis
+
+Internal technical notes
+
+Administrative procedures
+
+Accountants and Social Security Consultants
+
+Retirement planning
+
+Eligibility assessments
+
+Benefit simulations
+
+Secondary Users
+
+Lawyers specializing in Previdenciary Law
+
+INSS and public administration professionals
+
+Students and researchers of social security systems
+
 
 
 ---
